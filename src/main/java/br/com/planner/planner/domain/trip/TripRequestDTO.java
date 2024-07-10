@@ -1,4 +1,4 @@
-package br.com.planner.planner.domain;
+package br.com.planner.planner.domain.trip;
 
 import java.util.List;
 
