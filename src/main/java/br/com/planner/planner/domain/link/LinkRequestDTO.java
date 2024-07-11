@@ -1,4 +1,10 @@
 package br.com.planner.planner.domain.link;
 
-public record LinkRequestDTO(String title, String url) {
+import jakarta.validation.constraints.NotBlank;
+
+public record LinkRequestDTO(
+        @NotBlank
+        String title,
+        @NotBlank
+        String url) {
 }

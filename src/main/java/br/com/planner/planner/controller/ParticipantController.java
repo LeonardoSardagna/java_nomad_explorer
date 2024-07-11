@@ -1,8 +1,9 @@
 package br.com.planner.planner.controller;
 
 import br.com.planner.planner.domain.participant.Participant;
-import br.com.planner.planner.domain.participant.ParticipantDTO;
+import br.com.planner.planner.domain.participant.ParticipantRequestDTO;
 import br.com.planner.planner.repository.ParticipantRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class ParticipantController {
     private ParticipantRepository participantRepository;
 
     @PostMapping("/{id}/confirm")
-    public ResponseEntity<Participant> confirmParticipant(@PathVariable UUID id, @RequestBody ParticipantDTO data){
+    public ResponseEntity<Participant> confirmParticipant(@PathVariable UUID id, @RequestBody @Valid ParticipantRequestDTO data){
 
         Optional<Participant> participant = participantRepository.findById(id);
 

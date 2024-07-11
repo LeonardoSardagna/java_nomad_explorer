@@ -21,7 +21,6 @@ public class ActivityService {
     private ActivityRepository activityRepository;
 
     public ActivityResponseDTO registerActivity(Trip trip, ActivityRequestDTO data) {
-
             Activity newActivity = new Activity(data.title(), data.occurs_at(), trip);
             this.activityRepository.save(newActivity);
             return new ActivityResponseDTO(newActivity.getId());

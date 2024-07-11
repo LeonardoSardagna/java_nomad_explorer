@@ -1,4 +1,10 @@
 package br.com.planner.planner.domain.activity;
 
-public record ActivityRequestDTO(String title, String occurs_at) {
+import jakarta.validation.constraints.NotBlank;
+
+public record ActivityRequestDTO(
+        @NotBlank
+        String title,
+        @NotBlank
+        String occurs_at) {
 }
