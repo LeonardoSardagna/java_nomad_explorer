@@ -37,7 +37,7 @@ Main Features
 
 After starting the project, the endpoints documentation can be accessed through the link: http://localhost:8080/swagger-ui/index.html
 
-##Technologies Used
+## Technologies Used
 
 - Java
 - Spring Boot
