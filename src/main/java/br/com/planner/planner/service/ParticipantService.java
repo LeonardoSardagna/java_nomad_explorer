@@ -32,15 +32,12 @@ public class ParticipantService {
         return new ParticipantCreateResponse(participant.getId());
     }
 
-    public void confirmationEmailParticipants(UUID tripId) {}
-
     public List<ParticipantDetails> getAllParticipantsFromEvents(UUID id){
-        List<ParticipantDetails> participants = this.participantRepository.findByTripId(id)
+        return this.participantRepository.findByTripId(id)
                 .stream().map(trip -> new ParticipantDetails(
                         trip.getId(),
                         trip.getName(),
                         trip.getEmail(),
                         trip.getIsConfirmed())).toList();
-        return participants;
     }
 }
