@@ -1,8 +1,6 @@
 package br.com.planner.planner.controller;
 
-import br.com.planner.planner.domain.activity.ActivityDetails;
-import br.com.planner.planner.domain.activity.ActivityRequestDTO;
-import br.com.planner.planner.domain.activity.ActivityResponseDTO;
+import br.com.planner.planner.domain.activity.*;
 import br.com.planner.planner.domain.link.LinkDetails;
 import br.com.planner.planner.domain.link.LinkRequestDTO;
 import br.com.planner.planner.domain.link.LinkResponseDTO;
@@ -20,6 +18,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -93,9 +92,10 @@ public class TripController {
     }
 
     @GetMapping("/{id}/activities")
-    public ResponseEntity<List<ActivityDetails>> getAllActivities(@PathVariable UUID id) {
-        List<ActivityDetails> activityDetails = this.activityService.getAllActivitiesFromId(id);
-        return ResponseEntity.ok(activityDetails);
+    public ResponseEntity<ActitivitiesListResponse> getAllActivities(@PathVariable UUID id) {
+        List<DailyActivitiesDTO> activityDetails = this.activityService.getAllActivitiesGroupedByDate(id);
+        ActitivitiesListResponse actitivitiesResponse = new ActitivitiesListResponse(activityDetails);
+        return ResponseEntity.ok(actitivitiesResponse);
     }
 
     @PostMapping("/{id}/links")
