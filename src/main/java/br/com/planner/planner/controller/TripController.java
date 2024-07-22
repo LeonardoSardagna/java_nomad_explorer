@@ -83,7 +83,6 @@ public class TripController {
         return ResponseEntity.ok(participants);
     }
 
-    //VALIDA DATA
     @PostMapping("/{id}/activities")
     public ResponseEntity<ActivityResponseDTO> createActivity(@PathVariable UUID id, @RequestBody @Valid ActivityRequestDTO data) {
         Trip trip = this.tripService.getTrip(id);

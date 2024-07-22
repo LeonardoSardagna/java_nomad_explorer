@@ -2,6 +2,7 @@ package br.com.planner.planner.service;
 
 import br.com.planner.planner.domain.activity.*;
 import br.com.planner.planner.domain.trip.Trip;
+import br.com.planner.planner.infra.exception.ValidationException;
 import br.com.planner.planner.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,21 @@ public class ActivityService {
     private TripService tripService;
 
     public ActivityResponseDTO registerActivity(Trip trip, ActivityRequestDTO data) {
-            Activity newActivity = new Activity(data.title(), data.occurs_at(), trip);
-            this.activityRepository.save(newActivity);
-            return new ActivityResponseDTO(newActivity.getId());
+        Activity newActivity = new Activity(data.title(), data.occurs_at(), trip);
+
+        if(newActivity.getOccursAt().isBefore(trip.getStartsAt())){
+            throw new ValidationException("A viagem não pode ser agendada no passado.");
+        }
+
+        if(newActivity.getOccursAt().isAfter(trip.getEndsAt().plusDays(1).plusSeconds(1))){
+            throw new ValidationException("A viagem não pode ser agendada no futuro.");
+        }
+
+        this.activityRepository.save(newActivity);
+        return new ActivityResponseDTO(newActivity.getId());
     }
 
-    public List<ActivityDetails> getAllActivitiesFromId(UUID id ) {
+    public List<ActivityDetails> getAllActivitiesFromId(UUID id) {
         return this.activityRepository.findByTripId(id)
                 .stream().map(activity -> new ActivityDetails(
                         activity.getId(),
