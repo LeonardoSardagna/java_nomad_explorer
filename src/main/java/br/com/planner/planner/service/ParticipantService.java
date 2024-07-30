@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -42,8 +44,7 @@ public class ParticipantService {
         for (Participant participant : participants) {
             VerifyParticipant verifyParticipant = new VerifyParticipant();
             verifyParticipant.setParticipant(participant);
-            verifyParticipant.setUuid(UUID.randomUUID());
-            verifyParticipant.setTimer(Instant.now().plusMillis(180000));
+            verifyParticipant.setTimer(Instant.now().plusMillis(100000));
             verifyParticipantRepository.save(verifyParticipant);
         }
     }
@@ -78,18 +79,28 @@ public class ParticipantService {
         }
     }
 
+    @Transactional
     public String verifyRegister(String uuid) {
-        Optional<VerifyParticipant> verifyParticipant = verifyParticipantRepository.findByParticipantId(UUID.fromString(uuid));
-        if (verifyParticipant.isPresent()) {
-            VerifyParticipant participant = verifyParticipant.get();
-            if (participant.getTimer().compareTo(Instant.now()) < 0) {
-                verifyParticipantRepository.delete(participant);
-                participantRepository.deleteById(participant.getParticipant().getId());
-                return "Tempo de verificação expirado";
-            }
-        } else {
+        Optional<VerifyParticipant> optionalVerifyParticipant = verifyParticipantRepository.findByParticipantId(UUID.fromString(uuid));
+
+        if (optionalVerifyParticipant.isEmpty()) {
             return "Não possui cadastrado";
         }
-        return "Usuario esta no tempo limite para confirmação";
+
+        VerifyParticipant verifyParticipant = optionalVerifyParticipant.get();
+        Optional<Participant> optionalParticipant = participantRepository.findById(verifyParticipant.getParticipant().getId());
+
+        if (optionalParticipant.isEmpty()) {
+            return "Participante não encontrado";
+        }
+
+        Participant participant = optionalParticipant.get();
+
+        if (verifyParticipant.getTimer().compareTo(Instant.now()) <= 0 && !participant.getIsConfirmed()) {
+            participantRepository.deleteById(participant.getId());
+            verifyParticipantRepository.deleteById(verifyParticipant.getId());
+            return "Tempo de verificação expirado";
+        }
+        return "Usuário está no tempo limite para confirmação";
     }
 }

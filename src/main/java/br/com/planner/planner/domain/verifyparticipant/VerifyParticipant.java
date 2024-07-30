@@ -20,10 +20,8 @@ public class VerifyParticipant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
     @Column(nullable = false)
-    private UUID uuid;
-    @Column(nullable = false)
     private Instant timer;
     @ManyToOne
-    @JoinColumn(name = "participant_id", nullable = false, unique = true)
+    @JoinColumn(name = "participant_id", nullable = false)
     private Participant participant;
 }

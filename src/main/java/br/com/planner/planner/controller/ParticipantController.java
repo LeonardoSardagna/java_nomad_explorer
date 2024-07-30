@@ -2,9 +2,7 @@ package br.com.planner.planner.controller;
 
 import br.com.planner.planner.domain.participant.Participant;
 import br.com.planner.planner.domain.participant.ParticipantRequestDTO;
-import br.com.planner.planner.domain.verifyparticipant.VerifyParticipant;
 import br.com.planner.planner.repository.ParticipantRepository;
-import br.com.planner.planner.repository.VerifyParticipantRepository;
 import br.com.planner.planner.service.ParticipantService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +39,8 @@ public class ParticipantController {
     }
 
     @GetMapping("/verify/{uuid}")
-    public String verifyParticipant (@PathVariable String uuid){
-        return participantService.verifyRegister(uuid);
+    public ResponseEntity<String> verifyParticipant (@PathVariable String uuid){
+        String result = participantService.verifyRegister(uuid);
+        return ResponseEntity.ok(result);
     }
 }
