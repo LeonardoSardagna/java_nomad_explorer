@@ -1,19 +1,22 @@
 package br.com.planner.planner.service;
 
+import br.com.planner.planner.domain.participant.Participant;
+import br.com.planner.planner.domain.participant.ParticipantDetails;
 import br.com.planner.planner.domain.trip.Trip;
 import br.com.planner.planner.domain.trip.TripRequestDTO;
 import br.com.planner.planner.domain.trip.TripResponseDTO;
+import br.com.planner.planner.domain.verifyparticipant.VerifyParticipant;
 import br.com.planner.planner.repository.TripRepository;
+import br.com.planner.planner.repository.VerifyParticipantRepository;
 import br.com.planner.planner.validation.IValidation;
 import br.com.planner.planner.validation.ValidationExistsTrip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +36,9 @@ public class TripService {
 
     @Autowired
     private ValidationExistsTrip validationExistsTrip;
+
+    @Autowired
+    private DateFormaterService dateFormaterService;
 
     public TripResponseDTO createTrip(@RequestBody TripRequestDTO data) {
         Trip newTrip = new Trip(data);
@@ -69,10 +75,40 @@ public class TripService {
     public Trip confirmTrip(UUID id) {
         Optional<Trip> trip = tripRepository.findById(id);
 
+        List<ParticipantDetails> participants = participantService.getAllParticipantsFromEvents(id);
+
         validationExistsTrip.valid(id);
 
         Trip rawTrip = trip.get();
         rawTrip.setIsConfirmed(true);
+
+        String startDate = dateFormaterService.dateFormater(rawTrip.getStartsAt());
+        String andDate = dateFormaterService.dateFormater(rawTrip.getEndsAt());
+
+        participants.forEach(participant -> {
+            participantService.confirmationEmailParticipants(
+                    participant.email(),
+                    "Nomad Explorer - Convite para a Próxima Viagem!",
+                    "Olá,\n" +
+                            "\n" +
+                            "Espero que você esteja bem!\n" +
+                            "\n" +
+                            rawTrip.getOwnerName() + " gostaria de convidá-lo(a) para uma viagem que está organizando através do Nomad Explorer. Seguem os detalhes:\n" +
+                            "\n" +
+                            "Destino: " + rawTrip.getDestination() + "\n" +
+                            "Data de Início: " + startDate + "\n" +
+                            "Data de Término: " + andDate + "\n" +
+                            "\n" +
+                            "Para confirmar sua presença e obter mais detalhes, por favor, clique no link de confirmação abaixo e insira o seu nome:\n" +
+                            "\n" +
+                            "http://localhost:5173/trips/" + id + "/confirm/" + participant.id() + "\n" +
+                            "\n" +
+                            "Estou ansioso(a) para ter você conosco nesta viagem incrível! Se tiver alguma dúvida ou precisar de mais informações, não hesite em entrar em contato.\n" +
+                            "\n" +
+                            "Nomad Explorer\n" +
+                            "nomadexplorer@gmail.com");
+        });
+
         this.tripRepository.save(rawTrip);
         return rawTrip;
     }
