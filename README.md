@@ -1,7 +1,8 @@
 # Nomad Navigator - Travel Management Application
 
-Nomad Navigator is a Java application developed to facilitate the management and organization of trips, whether for work or leisure purposes. It allows users to create trips, invite participants, organize activities, and save important links related to the trip.
-Main Features
+Nomad Navigator is a Java application developed to facilitate the management and organization of trips, whether for work or leisure. Allows users to create trips, invite participants, organize activities, and save important trip-related links. This project communicates with the frontend (https://github.com/LeonardoSardagna/react_nomad_explorer.git)
+
+## Main Features
 
 1. Register Next Trip
 
