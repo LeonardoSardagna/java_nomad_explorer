@@ -44,7 +44,7 @@ public class ParticipantService {
         for (Participant participant : participants) {
             VerifyParticipant verifyParticipant = new VerifyParticipant();
             verifyParticipant.setParticipant(participant);
-            verifyParticipant.setTimer(Instant.now().plusMillis(100000));
+            verifyParticipant.setTimer(Instant.now().plusMillis(900000));
             verifyParticipantRepository.save(verifyParticipant);
         }
     }
