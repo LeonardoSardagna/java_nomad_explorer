@@ -1,39 +1,27 @@
 package br.com.planner.planner.infra.exception;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionHandling {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Void> error404(EntityNotFoundException exception) {
+    @ExceptionHandler(ValidationNotFoundException.class)
+    public ResponseEntity<Void> error404(ValidationNotFoundException exception) {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<MessageError>> error400(MethodArgumentNotValidException exception) {
-        var erro = exception.getFieldErrors();
-        return ResponseEntity.badRequest().body(erro.stream().map(MessageError::new).toList());
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> handleValidationException(ValidationException exception) {
+        return ResponseEntity.badRequest().body(exception.getMessage());
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> error500(Exception exception) {
+    @ExceptionHandler(InternalServerErrorHandler.class)
+    public ResponseEntity<String> error500(InternalServerErrorHandler exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + exception.getLocalizedMessage());
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<String> errorResponseResponseEntity(MissingServletRequestParameterException exception) {
-        var response = "Missing request parameter: " + exception.getParameterName();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     private record MessageError(String code, String message) {
