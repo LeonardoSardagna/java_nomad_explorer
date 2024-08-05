@@ -1,12 +1,15 @@
 package br.com.planner.planner.controller;
 
-import br.com.planner.planner.domain.activity.*;
+import br.com.planner.planner.domain.activity.ActitivitiesListResponse;
+import br.com.planner.planner.domain.activity.ActivityRequestDTO;
+import br.com.planner.planner.domain.activity.ActivityResponseDTO;
+import br.com.planner.planner.domain.activity.DailyActivitiesDTO;
 import br.com.planner.planner.domain.link.LinkDetails;
 import br.com.planner.planner.domain.link.LinkRequestDTO;
 import br.com.planner.planner.domain.link.LinkResponseDTO;
 import br.com.planner.planner.domain.participant.ParticipantCreateResponse;
-import br.com.planner.planner.domain.participant.ParticipantRequestDTO;
 import br.com.planner.planner.domain.participant.ParticipantDetails;
+import br.com.planner.planner.domain.participant.ParticipantRequestDTO;
 import br.com.planner.planner.domain.trip.Trip;
 import br.com.planner.planner.domain.trip.TripRequestDTO;
 import br.com.planner.planner.domain.trip.TripResponseDTO;
@@ -18,7 +21,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -39,37 +41,37 @@ public class TripController {
     private LinkService linkService;
 
     @PostMapping
-    public ResponseEntity<TripResponseDTO> createTrip(@RequestBody @Valid TripRequestDTO data) {
+    public ResponseEntity<TripResponseDTO> createTrip(@RequestBody TripRequestDTO data) {
         TripResponseDTO tripResponseDTO = this.tripService.createTrip(data);
         return ResponseEntity.ok(tripResponseDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Trip> tripDetails(@PathVariable UUID id) {
+    public ResponseEntity<Trip> tripDetails(@PathVariable UUID id) throws Exception {
         Trip trip = this.tripService.getTrip(id);
         return ResponseEntity.ok(trip);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Trip> updateTrip(@PathVariable UUID id, @RequestBody TripRequestDTO data) {
+    public ResponseEntity<Trip> updateTrip(@PathVariable UUID id, @RequestBody TripRequestDTO data) throws Exception {
         Trip trip = this.tripService.uploudTrip(id, data);
         return ResponseEntity.ok(trip);
     }
 
     @GetMapping("/{id}/confirm")
-    public ResponseEntity<Trip> confirmTrip(@PathVariable UUID id) {
+    public ResponseEntity<Trip> confirmTrip(@PathVariable UUID id) throws Exception {
         Trip trip = this.tripService.confirmTrip(id);
         return ResponseEntity.ok(trip);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTrip(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteTrip(@PathVariable UUID id) throws Exception {
         this.tripService.deleteTrip(id);
-        return ResponseEntity.ok("Viagem deletada com sucesso");
+        return ResponseEntity.ok("A viagem foi deletada com sucesso");
     }
 
     @PostMapping("/{id}/invite")
-    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID id, @RequestBody ParticipantRequestDTO data) {
+    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID id, @RequestBody ParticipantRequestDTO data){
         Trip trip = tripService.getTrip(id);
 
         ParticipantCreateResponse participantResponse = this.participantService

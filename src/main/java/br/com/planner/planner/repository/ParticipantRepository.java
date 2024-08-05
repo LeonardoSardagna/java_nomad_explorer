@@ -1,9 +1,7 @@
 package br.com.planner.planner.repository;
 
 import br.com.planner.planner.domain.participant.Participant;
-import br.com.planner.planner.domain.participant.ParticipantDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.UUID;
 

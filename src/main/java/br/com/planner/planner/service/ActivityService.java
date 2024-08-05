@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +26,24 @@ public class ActivityService {
     public ActivityResponseDTO registerActivity(Trip trip, ActivityRequestDTO data) {
         Activity newActivity = new Activity(data.title(), data.occurs_at(), trip);
 
-        if(newActivity.getOccursAt().isBefore(trip.getStartsAt())){
-            throw new ValidationException("A viagem não pode ser agendada no passado.");
+        if (newActivity.getOccursAt().isBefore(trip.getStartsAt())) {
+            throw new ValidationException("A atividade não pode ser agendada no passado da viagem.");
         }
 
-        if(newActivity.getOccursAt().isAfter(trip.getEndsAt().plusDays(1).plusSeconds(1))){
-            throw new ValidationException("A viagem não pode ser agendada no futuro.");
+        if (newActivity.getOccursAt().isAfter(trip.getEndsAt().plusDays(1).plusSeconds(1))) {
+            throw new ValidationException("A atividade não pode ser agendada no futuro da viagem.");
+        }
+
+        List<Activity> existingActivities = this.activityRepository.findByTripAndOccursAtBetween(
+                trip,
+                newActivity.getOccursAt().minusHours(2),
+                newActivity.getOccursAt().plusHours(2)
+        );
+
+        for (Activity activity : existingActivities) {
+            if (activity.getOccursAt().equals(newActivity.getOccursAt())) {
+                throw new ValidationException("Já existe uma atividade agendada para este horário.");
+            }
         }
 
         this.activityRepository.save(newActivity);

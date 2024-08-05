@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +38,7 @@ public class ParticipantController {
     }
 
     @GetMapping("/verify/{uuid}")
-    public ResponseEntity<String> verifyParticipant (@PathVariable String uuid){
+    public ResponseEntity<String> verifyParticipant(@PathVariable String uuid) {
         String result = participantService.verifyRegister(uuid);
         return ResponseEntity.ok(result);
     }

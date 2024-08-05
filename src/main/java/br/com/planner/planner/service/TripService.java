@@ -1,20 +1,19 @@
 package br.com.planner.planner.service;
 
-import br.com.planner.planner.domain.participant.Participant;
 import br.com.planner.planner.domain.participant.ParticipantDetails;
 import br.com.planner.planner.domain.trip.Trip;
 import br.com.planner.planner.domain.trip.TripRequestDTO;
 import br.com.planner.planner.domain.trip.TripResponseDTO;
-import br.com.planner.planner.domain.verifyparticipant.VerifyParticipant;
+import br.com.planner.planner.infra.exception.InternalServerErrorHandler;
+import br.com.planner.planner.infra.exception.ValidationException;
 import br.com.planner.planner.repository.TripRepository;
-import br.com.planner.planner.repository.VerifyParticipantRepository;
 import br.com.planner.planner.validation.IValidation;
+import br.com.planner.planner.validation.ValidationData;
 import br.com.planner.planner.validation.ValidationExistsTrip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,15 +31,20 @@ public class TripService {
     private ParticipantService participantService;
 
     @Autowired
+    private DateFormaterService dateFormaterService;
+
+    @Autowired
     private List<IValidation> validationList = new ArrayList<>();
+
+    @Autowired
+    private ValidationData validationData;
 
     @Autowired
     private ValidationExistsTrip validationExistsTrip;
 
-    @Autowired
-    private DateFormaterService dateFormaterService;
-
     public TripResponseDTO createTrip(@RequestBody TripRequestDTO data) {
+        validationData.valid(data);
+
         Trip newTrip = new Trip(data);
 
         validationList.forEach(valid -> valid.valid(data));
@@ -59,14 +63,30 @@ public class TripService {
     public Trip uploudTrip(UUID id, TripRequestDTO data) {
         Optional<Trip> trip = tripRepository.findById(id);
 
-        validationExistsTrip.valid(id);
-        validationList.forEach(valid -> valid.valid(data));
-
+        if(trip.isEmpty()){
+            validationExistsTrip.valid(id);
+        }
         Trip rawTrip = trip.get();
 
-        rawTrip.setDestination(data.destination());
-        rawTrip.setStartsAt(LocalDateTime.parse(data.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
-        rawTrip.setEndsAt(LocalDateTime.parse(data.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
+        if (data.ownerName() != null && !data.ownerName().isBlank()) {
+            rawTrip.setOwnerName(data.ownerName());
+        }
+
+        if (data.ownerEmail() != null && !data.ownerEmail().isBlank()) {
+            rawTrip.setOwnerEmail(data.ownerEmail());
+        }
+
+        if (data.destination() != null && !data.destination().isBlank()) {
+            rawTrip.setDestination(data.destination());
+        }
+
+        if (data.starts_at() != null && !data.starts_at().isBlank()) {
+            rawTrip.setStartsAt(LocalDateTime.parse(data.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
+        }
+
+        if (data.ends_at() != null && !data.ends_at().isBlank()) {
+            rawTrip.setEndsAt(LocalDateTime.parse(data.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
+        }
 
         this.tripRepository.save(rawTrip);
         return rawTrip;
