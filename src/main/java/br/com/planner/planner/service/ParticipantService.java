@@ -50,7 +50,7 @@ public class ParticipantService {
         for (Participant participant : participants) {
             VerifyParticipant verifyParticipant = new VerifyParticipant();
             verifyParticipant.setParticipant(participant);
-            verifyParticipant.setTimer(Instant.now().plusMillis(900000));
+            verifyParticipant.setTimer(Instant.now().plusMillis(100000));
             verifyParticipantRepository.save(verifyParticipant);
         }
     }
@@ -101,12 +101,12 @@ public class ParticipantService {
     public void confirmationEmailParticipants(String emails_to_invite, String subject, String message) {
 
         try {
-//            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//            simpleMailMessage.setFrom(this.ownerEmail);
-//            simpleMailMessage.setTo(emails_to_invite);
-//            simpleMailMessage.setSubject(subject);
-//            simpleMailMessage.setText(message);
-//            javaMailSender.send(simpleMailMessage);
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(this.ownerEmail);
+            simpleMailMessage.setTo(emails_to_invite);
+            simpleMailMessage.setSubject(subject);
+            simpleMailMessage.setText(message);
+            javaMailSender.send(simpleMailMessage);
             System.out.println("Email enviado");
         } catch (Exception e) {
             e.getLocalizedMessage();
