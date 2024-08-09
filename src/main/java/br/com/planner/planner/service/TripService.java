@@ -11,6 +11,7 @@ import br.com.planner.planner.validation.IValidation;
 import br.com.planner.planner.validation.ValidationData;
 import br.com.planner.planner.validation.ValidationExistsTrip;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
