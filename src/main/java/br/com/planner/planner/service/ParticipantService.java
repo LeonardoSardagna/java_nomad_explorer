@@ -98,6 +98,11 @@ public class ParticipantService {
         }
     }
 
+    public Participant getParticipant(UUID id){
+        Optional<Participant> rawParticipant = participantRepository.findById(id);
+        return rawParticipant.get();
+    }
+
     public String confirmationEmailParticipants(String emails_to_invite, String subject, String message) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();

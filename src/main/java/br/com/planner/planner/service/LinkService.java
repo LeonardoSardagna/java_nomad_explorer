@@ -31,4 +31,9 @@ public class LinkService {
                         link.getTitle(),
                         link.getUrl())).toList();
     }
+
+    public String deleteLink(UUID id){
+        linkRepository.deleteById(id);
+        return "Link deletado com sucesso";
+    }
 }

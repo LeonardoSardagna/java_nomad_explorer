@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,11 @@ public class ActivityService {
                         activity.getId(),
                         activity.getTitle(),
                         activity.getOccursAt())).toList();
+    }
+
+    public String deleteActivitie(UUID id) {
+        activityRepository.deleteById(id);
+        return "Atividade Deletada com sucesso";
     }
 
     public List<DailyActivitiesDTO> getAllActivitiesGroupedByDate(UUID tripId) {

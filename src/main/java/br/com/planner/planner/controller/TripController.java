@@ -1,9 +1,6 @@
 package br.com.planner.planner.controller;
 
-import br.com.planner.planner.domain.activity.ActitivitiesListResponse;
-import br.com.planner.planner.domain.activity.ActivityRequestDTO;
-import br.com.planner.planner.domain.activity.ActivityResponseDTO;
-import br.com.planner.planner.domain.activity.DailyActivitiesDTO;
+import br.com.planner.planner.domain.activity.*;
 import br.com.planner.planner.domain.link.LinkDetails;
 import br.com.planner.planner.domain.link.LinkRequestDTO;
 import br.com.planner.planner.domain.link.LinkResponseDTO;
@@ -99,6 +96,12 @@ public class TripController {
         return ResponseEntity.ok(actitivitiesResponse);
     }
 
+    @DeleteMapping("/{id}/activities")
+    public ResponseEntity<String> deleteActivity(@PathVariable UUID id) {
+        String activity = activityService.deleteActivitie(id);
+        return ResponseEntity.ok(activity);
+    }
+
     @PostMapping("/{id}/links")
     public ResponseEntity<LinkResponseDTO> createLink(@PathVariable UUID id, @RequestBody @Valid LinkRequestDTO data) {
         Trip trip = this.tripService.getTrip(id);
@@ -110,5 +113,11 @@ public class TripController {
     public ResponseEntity<List<LinkDetails>> getAllLinks(@PathVariable UUID id) {
         List<LinkDetails> linkDetails = this.linkService.getAllLinkFromId(id);
         return ResponseEntity.ok(linkDetails);
+    }
+
+    @DeleteMapping("/{id}/links")
+    public ResponseEntity<String> deleteLink(@PathVariable UUID id) {
+        String link = linkService.deleteLink(id);
+        return ResponseEntity.ok(link);
     }
 }
