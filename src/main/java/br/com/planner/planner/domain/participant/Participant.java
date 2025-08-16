@@ -16,13 +16,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Participant {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String email;
-    @Column(name = "is_confirmed", nullable = false)
+    @Column(name = "is_confirmed", nullable = false, columnDefinition = "BOOLEAN")
     private Boolean isConfirmed;
     @ManyToOne
     @JoinColumn(name = "trip_id", nullable = false)

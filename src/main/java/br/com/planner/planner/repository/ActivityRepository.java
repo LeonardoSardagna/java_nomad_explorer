@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface ActivityRepository extends JpaRepository<Activity, UUID> {
+public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    List<Activity> findByTripId(UUID id);
+    List<Activity> findByTripId(Long id);
 
     List<Activity> findByTripAndOccursAtBetween(Trip trip, LocalDateTime localDateTime, LocalDateTime localDateTime1);
+
+    void deleteById(Long id);
 }

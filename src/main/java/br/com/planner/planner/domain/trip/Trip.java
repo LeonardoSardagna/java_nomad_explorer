@@ -17,8 +17,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Trip {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "owner_name", nullable = false)
     private String ownerName;
     @Column(name = "owner_email", nullable = false)
@@ -29,7 +29,7 @@ public class Trip {
     private LocalDateTime startsAt;
     @Column(name = "ends_at", nullable = false)
     private LocalDateTime endsAt;
-    @Column(name = "is_confirmed", nullable = false)
+    @Column(name = "is_confirmed", nullable = false, columnDefinition = "BOOLEAN")
     private Boolean isConfirmed;
 
     public Trip(TripRequestDTO data) {

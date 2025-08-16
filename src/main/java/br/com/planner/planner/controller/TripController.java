@@ -44,31 +44,31 @@ public class TripController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Trip> tripDetails(@PathVariable UUID id) throws Exception {
+    public ResponseEntity<Trip> tripDetails(@PathVariable Long id) throws Exception {
         Trip trip = this.tripService.getTrip(id);
         return ResponseEntity.ok(trip);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Trip> updateTrip(@PathVariable UUID id, @RequestBody TripRequestDTO data) throws Exception {
+    public ResponseEntity<Trip> updateTrip(@PathVariable Long id, @RequestBody TripRequestDTO data) throws Exception {
         Trip trip = this.tripService.uploudTrip(id, data);
         return ResponseEntity.ok(trip);
     }
 
     @GetMapping("/{id}/confirm")
-    public ResponseEntity<Trip> confirmTrip(@PathVariable UUID id) throws Exception {
+    public ResponseEntity<Trip> confirmTrip(@PathVariable Long id) throws Exception {
         Trip trip = this.tripService.confirmTrip(id);
         return ResponseEntity.ok(trip);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTrip(@PathVariable UUID id) throws Exception {
+    public ResponseEntity<String> deleteTrip(@PathVariable Long id) throws Exception {
         this.tripService.deleteTrip(id);
         return ResponseEntity.ok("A viagem foi deletada com sucesso");
     }
 
     @PostMapping("/{id}/invite")
-    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID id, @RequestBody ParticipantRequestDTO data){
+    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable Long id, @RequestBody ParticipantRequestDTO data){
         Trip trip = tripService.getTrip(id);
 
         ParticipantCreateResponse participantResponse = this.participantService
@@ -77,46 +77,46 @@ public class TripController {
     }
 
     @GetMapping("/{id}/participants")
-    public ResponseEntity<List<ParticipantDetails>> getAllParticipants(@PathVariable UUID id) {
+    public ResponseEntity<List<ParticipantDetails>> getAllParticipants(@PathVariable Long id) {
         List<ParticipantDetails> participants = this.participantService.getAllParticipantsFromEvents(id);
         return ResponseEntity.ok(participants);
     }
 
     @PostMapping("/{id}/activities")
-    public ResponseEntity<ActivityResponseDTO> createActivity(@PathVariable UUID id, @RequestBody @Valid ActivityRequestDTO data) {
+    public ResponseEntity<ActivityResponseDTO> createActivity(@PathVariable Long id, @RequestBody @Valid ActivityRequestDTO data) {
         Trip trip = this.tripService.getTrip(id);
         ActivityResponseDTO activityResponse = this.activityService.registerActivity(trip, data);
         return ResponseEntity.ok(activityResponse);
     }
 
     @GetMapping("/{id}/activities")
-    public ResponseEntity<ActitivitiesListResponse> getAllActivities(@PathVariable UUID id) {
+    public ResponseEntity<ActitivitiesListResponse> getAllActivities(@PathVariable Long id) {
         List<DailyActivitiesDTO> activityDetails = this.activityService.getAllActivitiesGroupedByDate(id);
         ActitivitiesListResponse actitivitiesResponse = new ActitivitiesListResponse(activityDetails);
         return ResponseEntity.ok(actitivitiesResponse);
     }
 
     @DeleteMapping("/{id}/activities")
-    public ResponseEntity<String> deleteActivity(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteActivity(@PathVariable Long id) {
         String activity = activityService.deleteActivitie(id);
         return ResponseEntity.ok(activity);
     }
 
     @PostMapping("/{id}/links")
-    public ResponseEntity<LinkResponseDTO> createLink(@PathVariable UUID id, @RequestBody @Valid LinkRequestDTO data) {
+    public ResponseEntity<LinkResponseDTO> createLink(@PathVariable Long id, @RequestBody @Valid LinkRequestDTO data) {
         Trip trip = this.tripService.getTrip(id);
         LinkResponseDTO linkResponseDTO = this.linkService.registerLink(trip, data);
         return ResponseEntity.ok(linkResponseDTO);
     }
 
     @GetMapping("/{id}/links")
-    public ResponseEntity<List<LinkDetails>> getAllLinks(@PathVariable UUID id) {
+    public ResponseEntity<List<LinkDetails>> getAllLinks(@PathVariable Long id) {
         List<LinkDetails> linkDetails = this.linkService.getAllLinkFromId(id);
         return ResponseEntity.ok(linkDetails);
     }
 
     @DeleteMapping("/{id}/links")
-    public ResponseEntity<String> deleteLink(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteLink(@PathVariable Long id) {
         String link = linkService.deleteLink(id);
         return ResponseEntity.ok(link);
     }

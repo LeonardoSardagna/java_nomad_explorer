@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class ValidationExistsTrip {
@@ -15,7 +14,7 @@ public class ValidationExistsTrip {
     @Autowired
     private TripRepository tripRepository;
 
-    public void valid(UUID id) {
+    public void valid(Long id) {
         Optional<Trip> trip = this.tripRepository.findById(id);
         if (trip.isEmpty()) {
             throw new ValidationNotFoundException("Viagem não encontrada");

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class LinkService {
@@ -24,7 +23,7 @@ public class LinkService {
         return new LinkResponseDTO(link.getId());
     }
 
-    public List<LinkDetails> getAllLinkFromId(UUID id) {
+    public List<LinkDetails> getAllLinkFromId(Long id) {
         return this.linkRepository.findByTripId(id)
                 .stream().map(link -> new LinkDetails(
                         link.getId(),
@@ -32,7 +31,7 @@ public class LinkService {
                         link.getUrl())).toList();
     }
 
-    public String deleteLink(UUID id){
+    public String deleteLink(Long id){
         linkRepository.deleteById(id);
         return "Link deletado com sucesso";
     }

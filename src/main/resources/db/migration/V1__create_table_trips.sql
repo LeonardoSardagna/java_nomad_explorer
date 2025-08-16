@@ -1,5 +1,5 @@
 CREATE TABLE trips(
-    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    id bigint not null auto_increment PRIMARY KEY,
     owner_name VARCHAR(255) NOT NULL,
     owner_email VARCHAR(255) NOT NULL,
     destination VARCHAR(255) NOT NULL,

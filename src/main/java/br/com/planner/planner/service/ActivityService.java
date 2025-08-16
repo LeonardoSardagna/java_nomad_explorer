@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,7 +50,7 @@ public class ActivityService {
         return new ActivityResponseDTO(newActivity.getId());
     }
 
-    public List<ActivityDetails> getAllActivitiesFromId(UUID id) {
+    public List<ActivityDetails> getAllActivitiesFromId(Long id) {
         return this.activityRepository.findByTripId(id)
                 .stream().map(activity -> new ActivityDetails(
                         activity.getId(),
@@ -59,12 +58,12 @@ public class ActivityService {
                         activity.getOccursAt())).toList();
     }
 
-    public String deleteActivitie(UUID id) {
+    public String deleteActivitie(Long id) {
         activityRepository.deleteById(id);
         return "Atividade Deletada com sucesso";
     }
 
-    public List<DailyActivitiesDTO> getAllActivitiesGroupedByDate(UUID tripId) {
+    public List<DailyActivitiesDTO> getAllActivitiesGroupedByDate(Long tripId) {
         Trip trip = this.tripService.getTrip(tripId);
         List<ActivityDetails> activities = getAllActivitiesFromId(tripId);
 

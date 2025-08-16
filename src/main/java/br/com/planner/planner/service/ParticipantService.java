@@ -82,7 +82,7 @@ public class ParticipantService {
         return new ParticipantCreateResponse(participant.getId());
     }
 
-    public List<ParticipantDetails> getAllParticipantsFromEvents(UUID id) {
+    public List<ParticipantDetails> getAllParticipantsFromEvents(Long id) {
 
         Optional<Trip> rawTrip = tripRepository.findById(id);
 
@@ -98,7 +98,7 @@ public class ParticipantService {
         }
     }
 
-    public Participant getParticipant(UUID id){
+    public Participant getParticipant(Long id){
         Optional<Participant> rawParticipant = participantRepository.findById(id);
         return rawParticipant.get();
     }
@@ -119,7 +119,7 @@ public class ParticipantService {
 
     @Transactional
     public String verifyRegister(String uuid) {
-        Optional<VerifyParticipant> optionalVerifyParticipant = verifyParticipantRepository.findByParticipantId(UUID.fromString(uuid));
+        Optional<VerifyParticipant> optionalVerifyParticipant = verifyParticipantRepository.findByParticipantId(Long.valueOf(uuid));
 
         if (optionalVerifyParticipant.isEmpty()) {
             throw new ValidationException("O usuário não possui cadastro");

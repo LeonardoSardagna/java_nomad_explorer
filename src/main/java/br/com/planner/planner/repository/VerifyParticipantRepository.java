@@ -6,5 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface VerifyParticipantRepository extends JpaRepository<VerifyParticipant, UUID> {
-  Optional<VerifyParticipant> findByParticipantId(UUID uuid);
+  Optional<VerifyParticipant> findByParticipantId(Long uuid);
+
+    void deleteById(Long id);
 }

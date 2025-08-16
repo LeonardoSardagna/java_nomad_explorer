@@ -4,14 +4,11 @@ import br.com.planner.planner.domain.participant.ParticipantDetails;
 import br.com.planner.planner.domain.trip.Trip;
 import br.com.planner.planner.domain.trip.TripRequestDTO;
 import br.com.planner.planner.domain.trip.TripResponseDTO;
-import br.com.planner.planner.infra.exception.InternalServerErrorHandler;
-import br.com.planner.planner.infra.exception.ValidationException;
 import br.com.planner.planner.repository.TripRepository;
 import br.com.planner.planner.validation.IValidation;
 import br.com.planner.planner.validation.ValidationData;
 import br.com.planner.planner.validation.ValidationExistsTrip;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -20,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class TripService {
@@ -55,13 +51,13 @@ public class TripService {
         return new TripResponseDTO(newTrip.getId());
     }
 
-    public Trip getTrip(UUID id) {
+    public Trip getTrip(Long id) {
         Optional<Trip> trip = tripRepository.findById(id);
         validationExistsTrip.valid(id);
         return trip.get();
     }
 
-    public Trip uploudTrip(UUID id, TripRequestDTO data) {
+    public Trip uploudTrip(Long id, TripRequestDTO data) {
         Optional<Trip> trip = tripRepository.findById(id);
 
         if(trip.isEmpty()){
@@ -93,7 +89,7 @@ public class TripService {
         return rawTrip;
     }
 
-    public Trip confirmTrip(UUID id) {
+    public Trip confirmTrip(Long id) {
         Optional<Trip> trip = tripRepository.findById(id);
 
         List<ParticipantDetails> participants = participantService.getAllParticipantsFromEvents(id);
@@ -134,7 +130,7 @@ public class TripService {
         return rawTrip;
     }
 
-    public Trip deleteTrip(UUID id) {
+    public Trip deleteTrip(Long id) {
         Optional<Trip> trip = tripRepository.findById(id);
         validationExistsTrip.valid(id);
         Trip rawTrip = trip.get();

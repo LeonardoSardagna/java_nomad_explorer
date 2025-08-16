@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record TripDetails(
-        UUID id,
+        Long id,
         String ownerName,
         String ownerEmail,
         String destination,

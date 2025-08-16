@@ -19,7 +19,7 @@ import java.util.UUID;
 public class VerifyParticipant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    private Long id;
     @Column(nullable = false)
     private Instant timer;
     @ManyToOne

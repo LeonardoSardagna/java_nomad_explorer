@@ -29,7 +29,7 @@ public class ParticipantController {
     private DateFormaterService dateFormaterService;
 
     @PostMapping("/{id}/confirm")
-    public ResponseEntity<Participant> confirmParticipant(@PathVariable UUID id, @RequestBody @Valid ParticipantRequestDTO data) {
+    public ResponseEntity<Participant> confirmParticipant(@PathVariable Long id, @RequestBody @Valid ParticipantRequestDTO data) {
 
         Optional<Participant> participant = participantRepository.findById(id);
 
@@ -45,7 +45,7 @@ public class ParticipantController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteParticipant(@PathVariable UUID id) {
+    public ResponseEntity<String> DeleteParticipant(@PathVariable Long id) {
         Participant participant = participantService.getParticipant(id);
         Optional<Trip> trip = participantRepository.BuscaDadosDaViagemDeAcordoComParticipnt(id);
         String startDate = dateFormaterService.dateFormater(trip.get().getStartsAt());
