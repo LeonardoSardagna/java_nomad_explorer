@@ -26,11 +26,11 @@ public class ActivityService {
     public ActivityResponseDTO registerActivity(Trip trip, ActivityRequestDTO data) {
         Activity newActivity = new Activity(data.title(), data.occurs_at(), trip);
 
-        if (newActivity.getOccursAt().isBefore(trip.getStartsAt())) {
+        if (newActivity.getOccursAt().toLocalDate().isBefore(trip.getStartsAt())) {
             throw new ValidationException("A atividade não pode ser agendada no passado da viagem.");
         }
 
-        if (newActivity.getOccursAt().isAfter(trip.getEndsAt().plusDays(1).plusSeconds(1))) {
+        if (newActivity.getOccursAt().toLocalDate().isAfter(trip.getEndsAt())) {
             throw new ValidationException("A atividade não pode ser agendada no futuro da viagem.");
         }
 
@@ -67,8 +67,8 @@ public class ActivityService {
         Trip trip = this.tripService.getTrip(tripId);
         List<ActivityDetails> activities = getAllActivitiesFromId(tripId);
 
-        LocalDate startDate = trip.getStartsAt().toLocalDate();
-        LocalDate endDate = trip.getEndsAt().toLocalDate();
+        LocalDate startDate = trip.getStartsAt();
+        LocalDate endDate = trip.getEndsAt();
         int daysBetween = (int) ChronoUnit.DAYS.between(startDate, endDate);
 
         List<DailyActivitiesDTO> dailyActivitiesList = new ArrayList<>();

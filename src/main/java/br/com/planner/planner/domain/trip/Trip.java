@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -26,9 +28,9 @@ public class Trip {
     @Column(nullable = false)
     private String destination;
     @Column(name = "starts_at", nullable = false)
-    private LocalDateTime startsAt;
+    private LocalDate startsAt;
     @Column(name = "ends_at", nullable = false)
-    private LocalDateTime endsAt;
+    private LocalDate endsAt;
     @Column(name = "is_confirmed", nullable = false, columnDefinition = "BOOLEAN")
     private Boolean isConfirmed;
 
@@ -36,8 +38,8 @@ public class Trip {
         this.ownerName = data.ownerName();
         this.ownerEmail = data.ownerEmail();
         this.destination = data.destination();
-        this.startsAt = LocalDateTime.parse(data.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
-        this.endsAt = LocalDateTime.parse(data.ends_at(), DateTimeFormatter.ISO_DATE_TIME);
+        this.startsAt = LocalDate.parse(data.starts_at().substring(0, 10));
+        this.endsAt = LocalDate.parse(data.ends_at().substring(0, 10));
         this.isConfirmed = false;
     }
 }

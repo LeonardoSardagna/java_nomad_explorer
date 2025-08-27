@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -78,11 +79,11 @@ public class TripService {
         }
 
         if (data.starts_at() != null && !data.starts_at().isBlank()) {
-            rawTrip.setStartsAt(LocalDateTime.parse(data.starts_at(), DateTimeFormatter.ISO_DATE_TIME));
+            rawTrip.setStartsAt(LocalDate.parse(data.starts_at(), DateTimeFormatter.ISO_DATE));
         }
 
         if (data.ends_at() != null && !data.ends_at().isBlank()) {
-            rawTrip.setEndsAt(LocalDateTime.parse(data.ends_at(), DateTimeFormatter.ISO_DATE_TIME));
+            rawTrip.setEndsAt(LocalDate.parse(data.ends_at(), DateTimeFormatter.ISO_DATE));
         }
 
         this.tripRepository.save(rawTrip);
